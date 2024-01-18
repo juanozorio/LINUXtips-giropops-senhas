@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: redis
+  name: redis-sm
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  endpoints:
+  - interval: 10s
+    path: /metrics
+    targetPort: 9121

@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: giropops-senhas-prom-rule
+  namespace: monitoring
+  labels:
+    prometheus: k8s
+    role: alert-rules
+    app.kubernetes.io/name: kube-prometheus
+    app.kubernetes.io/part-of: kube-prometheus
+spec:
+  groups:
+  - name: giropops-senhas-prom-rule
+    rules:
+    - alert: AppGiropopsSenhasDown
+      expr: up{job="giropops-senhas"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "GIROPOPS-SENHAS está fora do ar"
+        description: "O nosso servidor FLASK está fora do ar"
