@@ -45,4 +45,4 @@ jobs:
       - name: Sign Docker Image
         run: cosign sign --yes --key cosign.key ${{ steps.get_digest.outputs.digest }}
         env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
