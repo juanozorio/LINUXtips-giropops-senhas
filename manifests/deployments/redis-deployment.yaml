@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: redis
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: redis
@@ -18,18 +17,46 @@ spec:
         resources:
           limits:
             memory: "512Mi"
+            cpu: "0.5"
+          requests:
+            memory: "256Mi"
             cpu: "0.2"
         ports:
         - containerPort: 6379
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 5
+          periodSeconds: 20
 
       - name: redis-exporter
         image: oliver006/redis_exporter:v1.29.0
         resources:
           limits:
             memory: "512Mi"
-            cpu: "0.2"
+            cpu: "200m"
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
         ports:
         - containerPort: 9121
         env:
         - name: REDIS_ADDR
           value: redis
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9121
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 9121
+          initialDelaySeconds: 5
+          periodSeconds: 20

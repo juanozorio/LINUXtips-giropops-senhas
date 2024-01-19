@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: giropops-senhas-app
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: giropops-senhas
@@ -18,9 +17,26 @@ spec:
         resources:
           limits:
             memory: "512Mi"
-            cpu: "0.5"
+            cpu: "1"
+          requests:
+            memory: "256Mi"
+            cpu: "0.3"
         ports:
         - containerPort: 5000
         env:
         - name: REDIS_HOST
           value: redis
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+          timeoutSeconds: 5
