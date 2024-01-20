@@ -2,9 +2,10 @@ name: Docker Image CI
 
 on:
   push:
-    paths:
-      - '**.py'
-      - 'Dockerfile'
+    branches: ["main"]
+    #paths:
+    #  - '**.py'
+    #  - 'Dockerfile'
 
 jobs:
   build-scan-and-deploy:
