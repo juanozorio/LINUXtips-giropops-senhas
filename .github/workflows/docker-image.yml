@@ -2,7 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["main"]
+    paths:
+      - '**.py'
+      - 'Dockerfile'
 
 jobs:
   build-scan-and-deploy:
@@ -10,6 +12,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.1
+
+      - name: Run Kubelinter
+        uses: stackrox/kube-linter-action@v1
+        with:
+          config: "./config/kubelinter/kubelinter.yaml"
+          directory: "./manifests"
 
       - name: Build Docker Image
         run: docker build -t juanozorio/giropops-senhas:1.0 .
