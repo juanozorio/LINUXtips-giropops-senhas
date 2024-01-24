@@ -1,0 +1,22 @@
+name: Kubelinter
+
+on:
+  push:
+    paths:
+      - 'manifests/**'
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  lint-yaml:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.1
+
+      - name: Check YAML Files
+        uses: stackrox/kube-linter-action@v1
+        with:
+          config: "./manifests/config/kubelinter/kubelinter.yaml"
+          directory: "./manifests"
